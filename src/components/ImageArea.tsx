@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Upload, Trash2, Image as ImageIcon, Copy, Download } from 'lucide-react';
+import { Upload, Trash2, Image as ImageIcon } from 'lucide-react';
 
 interface ImageAreaProps {
   image?: string;
@@ -76,28 +76,6 @@ export const ImageArea: React.FC<ImageAreaProps> = ({ image, onImageChange, onDe
     setIsDragging(false);
   };
 
-  const copyToClipboard = async () => {
-    if (image) {
-      try {
-        await navigator.clipboard.writeText(image);
-        // You could add a toast notification here
-      } catch (err) {
-        console.error('Failed to copy image to clipboard:', err);
-      }
-    }
-  };
-
-  const downloadImage = () => {
-    if (image) {
-      const link = document.createElement('a');
-      link.href = image;
-      link.download = `image-${Date.now()}.png`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-  };
-
   return (
     <div className="card-premium group">
       <div
@@ -123,42 +101,6 @@ export const ImageArea: React.FC<ImageAreaProps> = ({ image, onImageChange, onDe
               alt="Uploaded" 
               className="w-full h-full object-contain rounded-xl"
             />
-            
-            {/* Image Overlay Actions */}
-            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3 rounded-xl">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  copyToClipboard();
-                }}
-                className="p-3 bg-white/20 hover:bg-white/30 rounded-xl text-white transition-colors duration-200"
-                title="Copy to clipboard"
-              >
-                <Copy className="w-5 h-5" />
-              </button>
-              
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  downloadImage();
-                }}
-                className="p-3 bg-white/20 hover:bg-white/30 rounded-xl text-white transition-colors duration-200"
-                title="Download image"
-              >
-                <Download className="w-5 h-5" />
-              </button>
-              
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleFileUpload();
-                }}
-                className="p-3 bg-primary/80 hover:bg-primary rounded-xl text-white transition-colors duration-200"
-                title="Replace image"
-              >
-                <Upload className="w-5 h-5" />
-              </button>
-            </div>
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center h-64 text-center p-8">

@@ -149,24 +149,6 @@ export const TemplateCreatePopup: React.FC<TemplateCreatePopupProps> = ({
           ))}
         </div>
 
-        {/* Instructions */}
-        <div className="p-4 rounded-xl bg-white/5 border border-white/10 mb-6">
-          <div className="flex items-start gap-3">
-            <div className="w-6 h-6 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-              <Type className="w-3 h-3 text-blue-400" />
-            </div>
-            <div>
-              <h4 className="text-sm font-medium text-white mb-1">How to use</h4>
-              <ul className="text-xs text-white/60 space-y-1">
-                <li>• Add multiple text options for this template</li>
-                <li>• Click the circle to select which text is currently active</li>
-                <li>• Use navigation arrows to switch between texts later</li>
-                <li>• Click "Save" when you have selected your active text</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
         {/* Save Button */}
         {selectedIndex >= 0 && texts[selectedIndex]?.trim() && (
           <button
