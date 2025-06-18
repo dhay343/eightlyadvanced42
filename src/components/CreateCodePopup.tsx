@@ -30,17 +30,17 @@ export const CreateCodePopup: React.FC<CreateCodePopupProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center">
-              <Key className="w-5 h-5 text-white" />
+            <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-primary rounded-xl flex items-center justify-center">
+              <Key className="w-4 h-4 md:w-5 md:h-5 text-white" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-white">Create Vault Code</h2>
-              <p className="text-white/60 text-sm">Choose a unique identifier for your vault</p>
+              <h2 className="text-lg md:text-xl font-bold text-white">Create Vault Code</h2>
+              <p className="text-white/60 text-xs md:text-sm">Choose a unique identifier for your vault</p>
             </div>
           </div>
           <button 
             onClick={onClose} 
-            className="p-2 hover:bg-white/10 rounded-xl transition-colors duration-200 text-white/60 hover:text-white"
+            className="p-2 hover:bg-white/10 rounded-xl transition-colors duration-200 text-white/60 hover:text-white touch-target"
           >
             <X size={20} />
           </button>
@@ -73,7 +73,7 @@ export const CreateCodePopup: React.FC<CreateCodePopupProps> = ({
           <button
             onClick={handleSubmit}
             disabled={!code.trim()}
-            className={`w-full py-3 px-6 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
+            className={`w-full py-3 px-6 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 touch-target ${
               code.trim()
                 ? 'bg-gradient-primary text-white hover:shadow-lg transform hover:scale-105'
                 : 'bg-white/10 text-white/50 cursor-not-allowed'
@@ -85,10 +85,10 @@ export const CreateCodePopup: React.FC<CreateCodePopupProps> = ({
         </div>
 
         {/* Security Notice */}
-        <div className="mt-6 p-4 rounded-xl bg-white/5 border border-white/10">
+        <div className="mt-6 p-3 md:p-4 rounded-xl bg-white/5 border border-white/10">
           <div className="flex items-start gap-3">
-            <div className="w-6 h-6 bg-yellow-500/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-              <Sparkles className="w-3 h-3 text-yellow-400" />
+            <div className="w-5 h-5 md:w-6 md:h-6 bg-yellow-500/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+              <Sparkles className="w-2.5 h-2.5 md:w-3 md:h-3 text-yellow-400" />
             </div>
             <div>
               <h4 className="text-sm font-medium text-white mb-1">Security Notice</h4>

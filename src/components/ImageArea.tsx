@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { Upload, Trash2, Image as ImageIcon } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import { Upload, Trash2, Image as ImageIcon, X, ZoomIn } from 'lucide-react';
 
 interface ImageAreaProps {
   image?: string;
@@ -9,8 +9,9 @@ interface ImageAreaProps {
 
 export const ImageArea: React.FC<ImageAreaProps> = ({ image, onImageChange, onDelete }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isSelected, setIsSelected] = React.useState(false);
-  const [isDragging, setIsDragging] = React.useState(false);
+  const [isSelected, setIsSelected] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [showImageViewer, setShowImageViewer] = useState(false);
 
   const handleClick = () => {
     setIsSelected(true);
@@ -76,93 +77,125 @@ export const ImageArea: React.FC<ImageAreaProps> = ({ image, onImageChange, onDe
     setIsDragging(false);
   };
 
+  const handleImageClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowImageViewer(true);
+  };
+
   return (
-    <div className="card-premium group">
-      <div
-        className={`relative min-h-64 rounded-xl border-2 border-dashed transition-all duration-300 cursor-pointer overflow-hidden ${
-          isDragging
-            ? 'border-primary bg-primary/10 scale-105'
-            : isSelected
-            ? 'border-primary/50 bg-primary/5'
-            : 'border-white/20 hover:border-white/40'
-        }`}
-        onClick={handleClick}
-        onPaste={handlePaste}
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        tabIndex={0}
-        className="focus-premium"
-      >
-        {image ? (
-          <div className="relative h-full">
-            <img 
-              src={image} 
-              alt="Uploaded" 
-              className="w-full h-full object-contain rounded-xl"
-            />
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center h-64 text-center p-8">
-            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 ${
-              isDragging ? 'bg-primary scale-110' : 'bg-white/10'
-            }`}>
-              <ImageIcon className={`w-8 h-8 transition-colors duration-300 ${
-                isDragging ? 'text-white' : 'text-white/60'
-              }`} />
+    <>
+      <div className="card-premium group">
+        <div
+          className={`relative min-h-64 md:min-h-64 rounded-xl border-2 border-dashed transition-all duration-300 cursor-pointer overflow-hidden ${
+            isDragging
+              ? 'border-primary bg-primary/10 scale-105'
+              : isSelected
+              ? 'border-primary/50 bg-primary/5'
+              : 'border-white/20 hover:border-white/40'
+          }`}
+          onClick={handleClick}
+          onPaste={handlePaste}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          tabIndex={0}
+          className="focus-premium"
+        >
+          {image ? (
+            <div className="relative h-full">
+              <img 
+                src={image} 
+                alt="Uploaded" 
+                className="w-full h-full object-contain rounded-xl cursor-pointer hover:opacity-90 transition-opacity duration-300"
+                onClick={handleImageClick}
+              />
+              {/* Mobile zoom indicator */}
+              <div className="md:hidden absolute top-2 right-2 p-2 bg-black/50 rounded-lg backdrop-blur-sm">
+                <ZoomIn className="w-4 h-4 text-white" />
+              </div>
             </div>
-            
-            {isSelected ? (
-              <div className="space-y-4">
+          ) : (
+            <div className="flex flex-col items-center justify-center h-64 text-center p-4 md:p-8">
+              <div className={`w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 ${
+                isDragging ? 'bg-primary scale-110' : 'bg-white/10'
+              }`}>
+                <ImageIcon className={`w-6 h-6 md:w-8 md:h-8 transition-colors duration-300 ${
+                  isDragging ? 'text-white' : 'text-white/60'
+                }`} />
+              </div>
+              
+              {isSelected ? (
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="text-base md:text-lg font-semibold text-white mb-2">Ready to Upload</h3>
+                    <p className="text-white/60 text-xs md:text-sm mb-4">
+                      Paste an image (Ctrl+V) or tap the button below
+                    </p>
+                  </div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleFileUpload();
+                    }}
+                    className="px-4 py-3 md:px-6 md:py-3 bg-gradient-primary rounded-xl text-white font-semibold btn-premium flex items-center gap-2 touch-target"
+                  >
+                    <Upload className="w-4 h-4" />
+                    Choose File
+                  </button>
+                </div>
+              ) : (
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-2">Ready to Upload</h3>
-                  <p className="text-white/60 text-sm mb-4">
-                    Paste an image (Ctrl+V) or click the button below
+                  <h3 className="text-base md:text-lg font-semibold text-white mb-2">Add Image</h3>
+                  <p className="text-white/60 text-xs md:text-sm">
+                    Tap to select, then paste or upload your image
                   </p>
                 </div>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleFileUpload();
-                  }}
-                  className="px-6 py-3 bg-gradient-primary rounded-xl text-white font-semibold btn-premium flex items-center gap-2"
-                >
-                  <Upload className="w-4 h-4" />
-                  Choose File
-                </button>
-              </div>
-            ) : (
-              <div>
-                <h3 className="text-lg font-semibold text-white mb-2">Add Image</h3>
-                <p className="text-white/60 text-sm">
-                  Click to select, then paste or upload your image
-                </p>
-              </div>
-            )}
+              )}
+            </div>
+          )}
+        </div>
+        
+        {/* Delete Button */}
+        {image && (
+          <div className="flex justify-end mt-4">
+            <button
+              onClick={onDelete}
+              className="group/delete px-3 py-2 md:px-4 md:py-2 bg-red-500/20 hover:bg-red-500 rounded-xl text-red-400 hover:text-white transition-all duration-300 flex items-center gap-2 touch-target"
+            >
+              <Trash2 className="w-4 h-4 group-hover/delete:scale-110 transition-transform duration-200" />
+              <span className="text-sm">Delete</span>
+            </button>
           </div>
         )}
+        
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          className="hidden"
+        />
       </div>
-      
-      {/* Delete Button */}
-      {image && (
-        <div className="flex justify-end mt-4">
-          <button
-            onClick={onDelete}
-            className="group/delete px-4 py-2 bg-red-500/20 hover:bg-red-500 rounded-xl text-red-400 hover:text-white transition-all duration-300 flex items-center gap-2"
-          >
-            <Trash2 className="w-4 h-4 group-hover/delete:scale-110 transition-transform duration-200" />
-            Delete
-          </button>
+
+      {/* Mobile Image Viewer */}
+      {showImageViewer && image && (
+        <div className="mobile-image-viewer" onClick={() => setShowImageViewer(false)}>
+          <div className="mobile-image-container">
+            <img 
+              src={image} 
+              alt="Full size view" 
+              className="mobile-image"
+              onClick={(e) => e.stopPropagation()}
+            />
+            <button
+              onClick={() => setShowImageViewer(false)}
+              className="absolute top-4 right-4 p-3 bg-black/50 rounded-full backdrop-blur-sm text-white hover:bg-black/70 transition-colors duration-200 touch-target"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
         </div>
       )}
-      
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        onChange={handleFileChange}
-        className="hidden"
-      />
-    </div>
+    </>
   );
 };
